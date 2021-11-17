@@ -1,21 +1,21 @@
 // Exercise 1: Get the array of all directors.
-function getAllDirectors(arreglo) {
-  let result =  arreglo.map(directors => directors.director);
+function getAllDirectors(array) {
+  let result =  array.map(directors => directors.director);
   console.log(result);
   return result;
 }
 
 
 // Exercise 2: Get the films of a certain director
-function getMoviesFromDirector(arreglo, director) {
-  let result =  arreglo.filter(directors => directors.director == director);
+function getMoviesFromDirector(array, director) {
+  let result =  array.filter(directors => directors.director == director);
   console.log(result);
   return result;
 }
 
 // Exercise 3: Calculate the average of the films of a given director.
-function moviesAverageOfDirector(arreglo, director) {
-  let result =  arreglo.filter(directors => directors.director == director);
+function moviesAverageOfDirector(array, director) {
+  let result =  array.filter(directors => directors.director == director);
   let scores = result.map(scores => scores.score)
   let sumScore = scores.reduce((accumulator, currentValue) => {
       return accumulator + currentValue
@@ -27,9 +27,9 @@ function moviesAverageOfDirector(arreglo, director) {
 
 
 // Exercise 4:  Alphabetic order by title 
-function orderAlphabetically(arreglo) {
+function orderAlphabetically(array) {
 
-  var ordenTitulo = [...arreglo].sort(function(a, b) {
+  var ordenTitulo = [...array].sort(function(a, b) {
   var titleA = a.title.toUpperCase();
   var titleB = b.title.toUpperCase();
   if (titleA < titleB) {
@@ -50,8 +50,8 @@ function orderAlphabetically(arreglo) {
 }
 
 // Exercise 5: Order by year, ascending
-function orderByYear(arreglo) {
-  var ordenYear = [...arreglo].sort(function(a, b) {
+function orderByYear(array) {
+  var ordenYear = [...array].sort(function(a, b) {
     var yearA = a.year;
     var yearB = b.year;
     var tituloA = a.title;
@@ -81,8 +81,8 @@ function orderByYear(arreglo) {
 
 // Exercise 6: Calculate the average of the movies in a category
 
-function moviesAverageByCategory(arreglo, genre) {
-  let arrayCateg = arreglo.filter(x => x.genre.includes(genre));
+function moviesAverageByCategory(array, genre) {
+  let arrayCateg = array.filter(x => x.genre.includes(genre));
     console.log(arrayCateg);
     return moviesAverage(arrayCateg);
 }
@@ -90,7 +90,7 @@ function moviesAverageByCategory(arreglo, genre) {
 function moviesAverage(arrayCateg){
   let scores = arrayCateg.map(scores => scores.score)
     for (let i = 0; i < scores.length; i++) {
-      if (scores[i] == undefined)
+      if (scores[i] == '')
       scores.splice(i, 1)
     }
 
@@ -102,23 +102,26 @@ function moviesAverage(arrayCateg){
     return averageScore
 }
 
+
 // Exercise 7: Modify the duration of movies to minutes
 
 
-function hoursToMinutes(arreglo) {
+function hoursToMinutes(array) {
 
   let moviesInMinutes = []
   let RegexTime = new RegExp(/d+/)
 
-  for (let i = 0; i < arreglo.length; i++) {
-    let newItem = {}
-      newItem.title = arreglo[i].title;
-      newItem.year = arreglo[i].year;
-      newItem.director = arreglo[i].director;
-      newItem.duration = arreglo[i].duration;
-      newItem.genre = arreglo[i].genre;
-      newItem.score = arreglo[i].score;
-      moviesInMinutes.push(newItem)
+  for (let i = 0; i < array.length; i++) {
+
+      moviesInMinutes.push({
+        title: array[i].title,
+        year: array[i].year,
+        director: array[i].director,
+        duration: array[i].duration,
+        genre: array[i].genre,
+        score: array[i].score,
+      });
+      
   }
   for (i = 0; i < moviesInMinutes.length; i++) {
     let him = moviesInMinutes[i].duration.split(' ')
@@ -131,9 +134,8 @@ function hoursToMinutes(arreglo) {
         moviesInMinutes[i].duration = total
       }
       else if (him.length == 1) {
-        let himSplited = him[0].split('')
-        if (himSplited.includes('m')) {
-          min = parseInt(himSplited.replace(RegexTime))
+        if (him[0].includes('min')) {
+          min = parseInt(him[0].replace(RegexTime))
           total = min
           moviesInMinutes[i].duration = total
         }
@@ -144,16 +146,37 @@ function hoursToMinutes(arreglo) {
           moviesInMinutes[i].duration = total
         }
       }
-      console.log(moviesInMinutes);
   return moviesInMinutes
 }
 
 
 // Exercise 8: Get the best film of a year
-function bestFilmOfYear() {
-  
-}
 
+
+function bestFilmOfYear(array, year) {
+  let result =  array.filter(pelis => pelis.year == year);
+  console.log(result);
+      let comp = result.sort(function (a, b) {
+        var peliA = a.score
+        var peliB = b.score
+        if (peliB < peliA) {
+          return -1;
+        }
+        if (peliB > peliA) {
+          return 1;
+        }
+        
+        return 0;
+        });
+
+        let bestScore = [comp.reduce(function (accumulator, currentValue) {
+          return accumulator.score > currentValue.score ? accumulator : currentValue
+        })]
+        
+
+        console.log(bestScore);
+        return bestScore;
+}
 
 
 // The following is required to make unit tests work.
